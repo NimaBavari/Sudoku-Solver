@@ -8,20 +8,17 @@
 """
 
 def file_to_list(sudoku_file):
-
 	"""
 	Takes a file as input, where an unsolved sudoku is displayed
 	in a grid fashion with unknown cells denoted as dashes (-),
 	and converts it into a list of chars, replacing every instance
 	of the dashes with a char '0'. Returns that list.
 	"""
-
 	try:
 	    with open(sudoku_file, 'r') as f:
 	        content = f.readlines()
 	except:
 		print('Error: Failed to open sudoku from file')
-
 	content = [line.strip() for line in content]
 	if not len(content) == 9:
 		raise Exception('Error: Too many or too few sudoku rows')
@@ -34,17 +31,14 @@ def file_to_list(sudoku_file):
 				for char in line:
 					if char == '-':
 						char = '0'
-
 					if not char.isdigit():
 						raise Exception('Error: Invalid character')
 					else:
 						sudoku_list.append(char)
-
 		return sudoku_list
 
 
 def solve_sudoku(s_file):
-
 	"""
 	Takes the list converted by the function file_to_list as input
 	and, for each element of this list as a cell it determines the
@@ -53,7 +47,6 @@ def solve_sudoku(s_file):
 	(char '0') and replaces it with that value. Returns this new
 	list.
 	"""
-
     s_list = file_to_list(s_file)
     while '0' in s_list:
 	    for i in range(81):
@@ -64,7 +57,6 @@ def solve_sudoku(s_file):
 	            for k in range(3):
 	                for j in range(3):
 	                    square.append(s_list[(int((i - i % 9) / 9) - int((i - i % 9) / 9) % 3 + k) * 9 + (i % 9 - i % 3) + j])
-
 	            candidates = set()
 	            candidates.update(row)
 	            candidates.update(column)
@@ -72,17 +64,14 @@ def solve_sudoku(s_file):
 	            candidates = {'1', '2', '3', '4', '5', '6', '7', '8', '9'}.difference(candidates)
 	            if len(candidates) == 1:
 	                s_list[i] = candidates.pop()
-
     return s_list
 
 
 def create_solution(file):
-
 	"""
 	Takes the list returned by the function solve_sudoku as input
 	and writes it into a file in a grid fashion.
 	"""
-
 	sudoku = solve_sudoku(file)
 	with open('solution.txt', 'w') as f:
 		for i in range(81):
